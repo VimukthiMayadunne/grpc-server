@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package dev.shared.resources.grpc;
+
+// Define the request and response messages
+message Empty {}
+
+message Account {
+  string id = 1;
+  string name = 2;
+  double balance = 3;
+}
+
+message AccountIdRequest {
+  string account_id = 1;
+}
+
+message AccountBalanceResponse {
+  string account_id = 1;
+  double balance = 2;
+}
+
+message TransactionRequest {
+  string account_id = 1;
+  double amount = 2; // positive for deposit, negative for withdrawal
+}
+
+message TransactionResponse {
+  string account_id = 1;
+  double new_balance = 2;
+}
+
+// Define the services
+service AccountService {
+  rpc GetAllAccounts (Empty) returns (stream Account);
+  rpc GetAccountBalance (AccountIdRequest) returns (AccountBalanceResponse);
+  rpc WithdrawOrDeposit (TransactionRequest) returns (TransactionResponse);
+}
